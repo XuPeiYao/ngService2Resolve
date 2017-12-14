@@ -1,27 +1,43 @@
 # NgService2Resolve
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.0.
+[![npm version](https://badge.fury.io/js/ng-service2resolve.svg)](https://badge.fury.io/js/ng-service2resolve)
+[![Downloads](https://img.shields.io/npm/dm/ng-service2resolve.svg)](https://www.npmjs.com/package/ng-service2resolve)
+[![license](https://img.shields.io/github/license/xupeiyao/ngService2Resolve.svg)](https://github.com/XuPeiYao/ngService2Resolve/blob/master/LICENSE)
 
-## Development server
+Simple way convert Service to Resolve.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Install
 
-## Code scaffolding
+```bash
+npm install ng-service2resolve
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Getting Started
 
-## Build
+```typescript
+// Import function
+import { service2Resolve } from 'ng-service2resolve';
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+// Create Resolve from Service
+const timeResolve = service2Resolve(MyTestService, (service, route, state) => {
+  return service.getTime();
+});
 
-## Running unit tests
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    component: MyTestComponent,
+    resolve: {
+      time: timeResolve //Add Routing Resolve
+    }
+  }
+];
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  providers: [timeResolve], // Add Providers
+  exports: [RouterModule]
+})
+export class AppRoutingModule {}
+```

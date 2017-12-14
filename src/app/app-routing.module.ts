@@ -8,10 +8,10 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { MyTestComponent } from './my-test/my-test.component';
-import { service2Resolve } from './service2resolve/service2resolve';
 import { MyTestService } from './my-test.service';
+import { service2Resolve } from './service2resolve/service2resolve';
 
-const timeResolve = service2Resolve(MyTestService, service => {
+const timeResolve = service2Resolve(MyTestService, (service, route, state) => {
   return service.getTime();
 });
 
