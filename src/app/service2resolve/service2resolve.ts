@@ -3,10 +3,16 @@ import { Observable } from 'rxjs/Observable';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 declare var Reflect: any;
-export function service2Resolve<TService, TResult>(
-  serviceType: Type<TService>,
+
+/**
+ * Convert service to resolve type
+ * @param serviceTypes Dependency injection types
+ * @param resolve Resolve.resolve method
+ */
+export function service2Resolve<TResult>(
+  serviceTypes: Type<any> | Type<any>[],
   resolve: (
-    service: TService,
+    services: any[],
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ) => TResult | Observable<TResult> | Promise<TResult>
@@ -49,17 +55,19 @@ export function service2Resolve<TService, TResult>(
     };
 
   return (function() {
-    function TempResolve(service) {
-      this.service = service;
+    function TempResolve(...services: any[]) {
       this.resolve = function(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
       ) {
-        return resolve(service, route, state);
+        return resolve(services, route, state);
       };
     }
+    if (!(serviceTypes instanceof Array)) {
+      serviceTypes = [serviceTypes];
+    }
     return __decorate(
-      [Object(Injectable)(), __metadata('design:paramtypes', [serviceType])],
+      [Object(Injectable)(), __metadata('design:paramtypes', serviceTypes)],
       TempResolve
     );
   })();
