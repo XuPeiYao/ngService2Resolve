@@ -19,9 +19,12 @@ npm install ng-service2resolve
 import { service2Resolve } from 'ng-service2resolve';
 
 // Create Resolve from Service
-const timeResolve = service2Resolve(MyTestService, (service, route, state) => {
-  return service.getTime();
-});
+const timeResolve = service2Resolve(
+  [MyTestService],
+  (services, route, state) => {
+    return services[0].getTime();
+  }
+);
 
 const routes: Routes = [
   {

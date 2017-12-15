@@ -11,9 +11,12 @@ import { MyTestComponent } from './my-test/my-test.component';
 import { MyTestService } from './my-test.service';
 import { service2Resolve } from './service2resolve/service2resolve';
 
-const timeResolve = service2Resolve(MyTestService, (service, route, state) => {
-  return service.getTime();
-});
+const timeResolve = service2Resolve(
+  [MyTestService],
+  (services, route, state) => {
+    return services[0].getTime();
+  }
+);
 
 const routes: Routes = [
   {
