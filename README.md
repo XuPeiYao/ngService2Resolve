@@ -32,14 +32,20 @@ const routes: Routes = [
     pathMatch: 'full',
     component: MyTestComponent,
     resolve: {
-      time: timeResolve //Add Routing Resolve
+      time: timeResolve //Add Routing Resolve,
+      time2: service2Resolve(//If use this method, need use findResolves function get all Resolve of routes
+        [MyTestService],
+        (services, route, state) => {
+          return services[0].getTime();
+        }
+      )
     }
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  providers: [timeResolve], // Add Providers
+  providers: [timeResolve], // Add Providers or use findResolves(routes) function
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
