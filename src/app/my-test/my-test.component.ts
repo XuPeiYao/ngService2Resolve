@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-my-test',
@@ -6,10 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./my-test.component.css']
 })
 export class MyTestComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private _route: ActivatedRoute) {
+    console.log(this._route.snapshot.data.value);
   }
 
+  ngOnInit() {}
 }
