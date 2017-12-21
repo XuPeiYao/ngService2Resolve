@@ -4,13 +4,14 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { MyTestService } from './my-test.service';
+import { MyTestService, ValueService } from './my-test.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, MyTestComponent],
   exports: [],
-  imports: [BrowserModule, AppRoutingModule],
-  providers: [MyTestService],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  providers: [MyTestService, ValueService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
