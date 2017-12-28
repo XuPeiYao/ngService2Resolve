@@ -9,8 +9,8 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { MyTestComponent } from './my-test/my-test.component';
 import { MyTestService, ValueService, ValueResolve } from './my-test.service';
-import { service2Resolve, Service2ResolveModule } from './service2resolve';
-import { findResolves } from './service2resolve';
+import { service2Resolve } from './service2resolve/service2resolve';
+import { Service2ResolveModule } from './service2resolve/service2resolve.module';
 
 // deceive AOT compiler `Function calls are not supported in decorators` problem
 export let timeResolve = null, valueResolve = null;
