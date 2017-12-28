@@ -8,9 +8,21 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { MyTestComponent } from './my-test/my-test.component';
-import { MyTestService, ValueService } from './my-test.service';
-import { service2Resolve } from './service2resolve';
+import { MyTestService, ValueService, ValueResolve } from './my-test.service';
+import { service2Resolve, Service2ResolveModule } from './service2resolve';
 import { findResolves } from './service2resolve';
+
+// deceive AOT compiler `Function calls are not supported in decorators` problem
+export let timeResolve = null, valueResolve = null;
+
+// use service2Resolve function create Resolve class
+timeResolve = service2Resolve([MyTestService], (services, route, state) => {
+  return services[0].getTime();
+});
+valueResolve = service2Resolve([ValueService], services => {
+  return (services[0] as ValueService).getValue();
+});
+
 
 const routes: Routes = [
   {
@@ -18,19 +30,18 @@ const routes: Routes = [
     pathMatch: 'full',
     component: MyTestComponent,
     resolve: {
-      time: service2Resolve([MyTestService], (services, route, state) => {
-        return services[0].getTime();
-      }),
-      value: service2Resolve([ValueService], services => {
-        return (services[0] as ValueService).getValue();
-      })
+      time: timeResolve,
+      value: valueResolve
     }
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  providers: findResolves(routes),
+  imports: [
+    Service2ResolveModule, // very important!
+    RouterModule.forRoot(routes)
+  ],
+  providers: [MyTestService, ValueService, valueResolve, timeResolve],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
