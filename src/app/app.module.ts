@@ -11,7 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [AppComponent, MyTestComponent],
   exports: [],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
-  providers: [MyTestService, ValueService],
+  providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

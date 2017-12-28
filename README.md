@@ -15,16 +15,16 @@ npm install ng-service2resolve
 ## Getting Started
 
 ```typescript
-// Import function
-import { service2Resolve } from 'ng-service2resolve';
+// Import method and function
+import {  Service2ResolveModule, service2Resolve } from './service2resolve';
 
-// Create Resolve from Service
-const timeResolve = service2Resolve(
-  [MyTestService],
-  (services, route, state) => {
-    return services[0].getTime();
-  }
-);
+// deceive AOT compiler, fix `Function calls are not supported in decorators` problem
+export let timeResolve = null, valueResolve = null;
+
+// use service2Resolve function create Resolve class
+timeResolve = service2Resolve([MyTestService], (services, route, state) => {
+  return services[0].getTime();
+});
 
 const routes: Routes = [
   {
@@ -33,7 +33,7 @@ const routes: Routes = [
     component: MyTestComponent,
     resolve: {
       time: timeResolve //Add Routing Resolve,
-      time2: service2Resolve(//If use this method, need use findResolves function get all Resolve of routes
+      time2: service2Resolve(//this way not support AOT. If use this way, you can use findResolves function get all Resolve of routes
         [MyTestService],
         (services, route, state) => {
           return services[0].getTime();
@@ -43,9 +43,13 @@ const routes: Routes = [
   }
 ];
 
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  providers: [timeResolve], // Add Providers or use findResolves(routes) function
+  imports: [
+    Service2ResolveModule, // very important!
+    RouterModule.forRoot(routes)
+  ],
+  providers: [findResolves(routes), timeResolve], // findResolves function NOT SUPPORT AOT
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

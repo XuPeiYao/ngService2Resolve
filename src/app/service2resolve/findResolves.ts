@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router';
 import { Type } from '@angular/core';
 
+/**
+ * get all ResolveType, but not support AOT
+ * @param routes routing configure
+ */
 export function findResolves(routes: Routes): any[] {
   console.log(routes);
   return routes
@@ -12,7 +16,7 @@ export function findResolves(routes: Routes): any[] {
         if (!x.hasOwnProperty(prop)) {
           continue;
         }
-        if (/.+Resolve$/.test(x[prop].name || '')) {
+        if (x[prop] instanceof Function) {
           result.push(x[prop]);
         }
       }
